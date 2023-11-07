@@ -5,13 +5,11 @@ import {
   placeOrderThunk,
   productSelector,
 } from "../../redux/productsSlice";
-import { authSelector } from "../../redux/authenticationSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 function Cart() {
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
-  const { user } = useSelector(authSelector);
   const { cart, orders } = useSelector(productSelector);
 
   useEffect(() => {
@@ -24,12 +22,13 @@ function Cart() {
     // console.log(cart)
   }, [cart]);
 
+
+
   // Define the handleDecreaseQuantity function
   const handleDecreaseQuantity = (index) => {
     // Make sure index is within a valid range
     if (index >= 0 && index < cart.products.length) {
       // Create a shallow copy of the cart and its products
-
       const updatedProducts = cart.products.map((product, i) => {
         if (i === index) {
           // Create a copy of the product and update its quantity property
@@ -81,7 +80,6 @@ function Cart() {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split("T")[0];
 
-    console.log(formattedDate); // Output: "2023-10-21"
     const order = {
       date: formattedDate,
       products: cart.products,

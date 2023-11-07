@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
-import styles from './Orders.module.css'
+import React from 'react'
 import { getOrdersThunk, productSelector } from '../../redux/productsSlice';
-import {  authSelector, actions, fetchAuthState } from "../../redux/authenticationSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function Orders() {
   const {orders} = useSelector(productSelector);

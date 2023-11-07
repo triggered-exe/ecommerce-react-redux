@@ -156,10 +156,11 @@ export const addToCartThunk = createAsyncThunk(
           // products: {...cart.products, product}
         });
         toast.success("Product added to cart");
-      }
+      }else{
+        toast.error("login/signup to add to cart");      }
     } catch (error) {
       console.log(error.message);
-      toast.error("Error adding product to cart");
+      toast.error(error.code);
     }
   }
 );
@@ -180,12 +181,11 @@ export const updateCartThunk = createAsyncThunk(
         await updateDoc(cartRef, {
           products: [...updatedProducts],
         });
-        console.log("Product updated in the cart");
       } else {
         console.error("Invalid or missing 'products' field in updated data.");
       }
     } catch (error) {
-      console.error("Error updating the cart:", error);
+      toast.error(error.code);
     }
   }
 );

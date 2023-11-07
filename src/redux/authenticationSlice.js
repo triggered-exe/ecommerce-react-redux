@@ -21,6 +21,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setLogin: (state, action) => {
+      state.isLoggedIn = true;
+        state.loading = false;
+        state.user = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -28,23 +33,14 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.isLoggedIn = action.payload.isLoggedIn;
       })
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        // Handle the success case, update the state
-        state.isLoggedIn = true;
-        state.loading = false;
-        state.user = action.payload;
-      })
       .addCase(signUpUser.pending, (state, action) => {
         console.log("signUpUser pending");
       })
       .addCase(signUpUser.fulfilled, (state, action) => {
-        console.log("signUpUser fulfilled");
-        console.log(action.payload);
-        state.user = action.payload;
+        if(action.payload){
+          state.user = action.payload;
         state.isLoggedIn = true;
+        } 
       })
       .addCase(logOutUser.pending, (state, action) => {
         console.log("logout pending");
@@ -55,7 +51,6 @@ const authSlice = createSlice({
       });
   },
 });
-
 
 
 
@@ -104,20 +99,16 @@ export const loginUser = createAsyncThunk(
         password
       );
       const user = userCredential.user;
-      console.log(user);
-      // Create a serializable user object
       const serializableUser = {
         uid: user.uid,
         email: user.email,
         // Add other properties you need in a serializable format
       };
       toast.success("Login Successful");
-      return serializableUser;
+
+      thunkAPI.dispatch(actions.setLogin(serializableUser));
     } catch (error) {
-      // Throw the error to trigger the rejected action
-      // throw error;
-      toast.error("Login Failed");
-      console.log(error);
+      toast.error(error.code);
     }
   }
 );
@@ -148,7 +139,7 @@ export const signUpUser = createAsyncThunk(
       toast.success("Sign Up Successful");
       return serializableUser;
     } catch (error) {
-      toast.error("Sign Up Failed");
+      toast.error(error.code);
     } 
   }
 );
@@ -158,20 +149,16 @@ export const signUpUser = createAsyncThunk(
 // Create an async log out authenticated user
 export const logOutUser = createAsyncThunk(
   "auth/logout",
-  async (userData, thunkAPI) => {
+  async () => {
     try {
       const auth = getAuth();
       signOut(auth);
       toast.success("Logout Successful");
     } catch (error) {
-      // Throw the error to trigger the rejected action
-      // throw error;
-      console.log(error);
-      toast.error("Logout Failed");
+      toast.error(error.code);
     }
   }
 );
-
 
 
 export const authReducer = authSlice.reducer;

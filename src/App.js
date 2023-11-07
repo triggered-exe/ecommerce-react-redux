@@ -29,18 +29,13 @@ function App() {
   },[])
 
 
-  
   useEffect(() => {  
-    // console.log('app.js');  
-    // console.log(isLoggedIn);  
     dispatch(fetchAuthState());  
-    if(isLoggedIn){
-      // console.log('app.js', user);
+    if(isLoggedIn && user){
       dispatch(getCartThunk(user));
       dispatch(getOrdersThunk(user));
     }
   },[isLoggedIn]);
-
 
 
 

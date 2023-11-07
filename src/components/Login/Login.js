@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from "./Login.module.css";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser, authSelector, actions, fetchAuthState } from "../../redux/authenticationSlice";
+import { loginUser, authSelector } from "../../redux/authenticationSlice";
 
 
 
